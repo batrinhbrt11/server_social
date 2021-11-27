@@ -33,6 +33,10 @@ const UserSchema = new mongoose.Schema(
       enum: [1, 2, 3],
       default: 3,
     },
+    city: {
+      type: String,
+      default: "",
+    },
     department: {
       type: String,
       default: "",
