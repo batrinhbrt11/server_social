@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Post = require("../models/Post");
 const User = require("../models/User");
+const PAGE_SIZE = 10;
 //create post
 router.post("/", async (req, res) => {
   const newPost = new Post(req.body);
@@ -74,7 +75,14 @@ router.get("/timeline/:userId", async (req, res) => {
         return Post.find({ userId: friendId });
       })
     );
-    res.status(200).json(userPosts.concat(...friendPosts));
+    const timeline_post = userPosts.concat(...friendPosts).sort((p1, p2) => {
+      return new Date(p2.createdAt) - new Date(p1.createdAt);
+    });
+    const page = req.query.page;
+    const skip_item = (page - 1) * PAGE_SIZE;
+    const end_item = page * PAGE_SIZE;
+    const result = timeline_post.slice(skip_item, end_item);
+    res.status(200).json(result);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -85,7 +93,14 @@ router.get("/profile/:userId", async (req, res) => {
   try {
     const currentUser = await User.findById(req.params.userId);
     const userPosts = await Post.find({ userId: currentUser._id });
-    res.status(200).json(userPosts);
+    const posts = userPosts.sort((p1, p2) => {
+      return new Date(p2.createdAt) - new Date(p1.createdAt);
+    });
+    const page = req.query.page;
+    const skip_item = (page - 1) * PAGE_SIZE;
+    const end_item = page * PAGE_SIZE;
+    const result = posts.slice(skip_item, end_item);
+    res.status(200).json(result);
   } catch (err) {
     res.status(500).json(err);
   }
