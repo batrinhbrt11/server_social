@@ -6,6 +6,8 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const userRoute = require("./routes/user");
 const authRoute = require("./routes/auth");
+const adminRoute = require("./routes/admin");
+const falcutyRoute = require("./routes/falcuty");
 const post = require("./routes/post");
 const PORT = 5000;
 dotenv.config();
@@ -25,6 +27,8 @@ app.use(morgan("common"));
 app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/posts", post);
+app.use("/api/falcuty", falcutyRoute);
+app.use("/api/admin", adminRoute);
 app.listen(PORT, () => {
   console.log("server is running 5000");
 });

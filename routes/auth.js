@@ -1,6 +1,9 @@
 const router = require("express").Router();
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
+const dotenv = require("dotenv");
+const jwt = require("jsonwebtoken");
+dotenv.config();
 //Create User
 //api/auth/register
 router.post("/register", async (req, res) => {
@@ -26,25 +29,26 @@ router.post("/register", async (req, res) => {
 
 //Login
 //api/auth/login
-router.post("/login", async (req, res) => {
-  try {
-    const user = await User.findOne({ email: req.body.email });
-
-    if (!user) {
-      res.status(400).json("user not found");
-    } else {
-      const validPassword = await bcrypt.compare(
-        req.body.password,
-        user.password
-      );
-      if (!validPassword) {
-        res.status(404).json("wrong password");
-      } else {
-        res.status(200).json(user);
+router.post("/login", async(req, res) => {
+  try{
+      const user = await User.findOne({ username: req.body.username });
+      if (!user) {
+          res.status(404).json("user not found");
+      } 
+      else {
+          const isMatched = bcrypt.compareSync(req.body.password, user.password);
+          if (!isMatched) {
+            res.status(403).json({code: 403, message:"Wrong password"});
+          } 
+          else {
+              const token = jwt.sign({id: user._id}, process.env.ACCESS_TOKEN_SECRET);
+              res.status(200).json({token});
+          }
       }
-    }
-  } catch (err) {
-    res.status(500).json(err);
   }
-});
+  catch(err){
+      res.status(500).json(err);
+  }
+})
+
 module.exports = router;

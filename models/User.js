@@ -9,16 +9,23 @@ const UserSchema = new mongoose.Schema(
       max: 50,
       unique: true,
     },
-    password: {
-      type: String,
+    name:{
+      type:String,
       required: true,
-      min: 6,
+      maxlength: 256
     },
     username: {
       type: String,
-      require: true,
-      min: 3,
-      max: 50,
+      required: true,
+      maxlength: 256,
+      unique: true
+    },
+    password:{
+      type: String
+    }, 
+    role:{
+      type: String,
+      required: true
     },
     profilePicture: {
       type: String,
@@ -28,16 +35,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    authorize: {
-      type: Number,
-      enum: [1, 2, 3],
-      default: 3,
-    },
     city: {
-      type: String,
-      default: "",
-    },
-    department: {
       type: String,
       default: "",
     },
