@@ -1,9 +1,15 @@
 const User = require("../models/User");
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
+const {
+  checkLogin,
+  checkUpdate,
+  checkAdmin,
+  checkFaculty,
+} = require("../Middleware/checktoken");
 //get user
 const PAGE_SIZE = 10;
-router.get("/", async (req, res, next) => {
+router.get("/", checkLogin, async (req, res, next) => {
   var page = req.query.page;
   if (page) {
     //get page
@@ -30,16 +36,28 @@ router.get("/", async (req, res, next) => {
   }
 });
 //update user
-router.put("/:id", async (req, res) => {
-  if (req.body.userId === req.params.id || req.body.authorize !== 1) {
-    if (req.body.password) {
-      try {
+router.put("/:id", checkUpdate, async (req, res) => {
+  if (req.body.password && req.body.newPassword) {
+    try {
+      const user = await User.findById(req.params.id);
+      const validPassword = await bcrypt.compare(
+        req.body.password,
+        user.password
+      );
+      if (!validPassword) {
+        res.status(403).json("Wrong password");
+      } else {
         const salt = await bcrypt.genSalt(10);
-        req.body.password = await bcrypt.hash(req.body.password, salt);
-      } catch (err) {
-        return res.status(500).json(err);
+        const hashedPassword = await bcrypt.hash(req.body.newPassword, salt);
+        const newUser = await User.findByIdAndUpdate(req.params.id, {
+          password: hashedPassword,
+        });
+        res.status(200).json("Account has been updated");
       }
+    } catch (err) {
+      return res.status(500).json(err);
     }
+  } else {
     try {
       const user = await User.findByIdAndUpdate(req.params.id, {
         $set: req.body,
@@ -48,13 +66,11 @@ router.put("/:id", async (req, res) => {
     } catch (err) {
       return res.status(500).json(err);
     }
-  } else {
-    return res.status(403).json("You can update only your account!");
   }
 });
 
 //delete user
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", checkAdmin, async (req, res) => {
   if (req.body.userId === req.params.id || req.body.authorize !== 1) {
     try {
       await User.findByIdAndDelete(req.params.id);
@@ -68,7 +84,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 //get a user
-router.get("/:id", async (req, res) => {
+router.get("/:id", checkLogin, async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     const { password, updatedAt, ...other } = user._doc;
@@ -121,14 +137,16 @@ router.put("/:id/unfollow", async (req, res) => {
   }
 });
 //get friend
-router.get("/friends/:userId", async (req, res) => {
+router.get("/friends/:userId", checkLogin, async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
+    console.log(user.followers);
     const friends = await Promise.all(
-      user.followings.map((friendId) => {
+      user.followers.map((friendId) => {
         return User.findById(friendId);
       })
     );
+
     let friendList = [];
     friends.map((friend) => {
       const { _id, username, profilePicture } = friend;
@@ -136,6 +154,7 @@ router.get("/friends/:userId", async (req, res) => {
     });
     res.status(200).json(friendList);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });

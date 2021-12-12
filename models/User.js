@@ -9,6 +9,7 @@ const UserSchema = new mongoose.Schema(
       max: 50,
       unique: true,
     },
+    authId: { type: String, unique: true },
     password: {
       type: String,
       required: true,
@@ -37,7 +38,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    department: {
+    faculty: {
       type: String,
       default: "",
     },
