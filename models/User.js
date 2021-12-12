@@ -13,13 +13,17 @@ const UserSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
-      min: 6,
     },
     username: {
       type: String,
-      require: true,
-      min: 3,
-      max: 50,
+      required: true,
+    },
+    password: {
+      type: String,
+    },
+    role: {
+      type: String,
+      required: true,
     },
     profilePicture: {
       type: String,
@@ -28,11 +32,6 @@ const UserSchema = new mongoose.Schema(
     coverPicture: {
       type: String,
       default: "",
-    },
-    authorize: {
-      type: Number,
-      enum: [1, 2, 3],
-      default: 3,
     },
     city: {
       type: String,

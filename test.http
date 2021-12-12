@@ -1,0 +1,40 @@
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "mtcn",
+    "password": "123456"
+}
+
+###
+GET http://localhost:5000/api/falcuty/notifications
+Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTczYjk3MGQ0NGRkNDI3M2VkMDBkNSIsImlhdCI6MTYzODM2ODQyNn0.gw4Sk7mMIInmL45HNikm92Lnkl8ior6Pebc4Wt0-iXA
+
+###
+
+POST http://localhost:5000/api/falcuty/notifications/create
+Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTczY2Q1MGQ0NGRkNDI3M2VkMDBkNyIsImlhdCI6MTYzODM2NzYzN30.PD4jR-aANaWcmhCKdIz9G7qiq7ClnptKv-yMm31mbJw
+Content-Type: application/json
+
+{
+    "title": "Lịch thi trực tuyến & Danh sách thi dành cho sinh viên hoãn thi",
+    "content": "Sinh viên xem Lịch thi trực tuyến & Danh sách thi dành cho sinh viên hoãn thi trong file đính kèm.",
+    "categoryId": "61a78022bf300a397dbc53dd"
+}
+
+###
+
+GET http://localhost:5000/api/falcuty/notifications/61a781c30fb5189451ac44f0
+Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTczYjk3MGQ0NGRkNDI3M2VkMDBkNSIsImlhdCI6MTYzODM2ODg2NH0.eprVwIlRE09uI9oVq--x6c27EsVGZNy32Z_WvkA8Wlw
+
+
+###
+
+PUT http://localhost:5000/api/falcuty/notifications/61a781c30fb5189451ac44f0
+Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTczYjk3MGQ0NGRkNDI3M2VkMDBkNSIsImlhdCI6MTYzODM3MDg3N30._HcoSxQzBeY-nYVRX2qkjPDw1NEqocJd_4zzIuTp5DU
+Content-Type: application/json
+
+{
+    "title": "Danh sách thi dành cho sinh viên hoãn thi",
+    "content": "Sinh viên xem Lịch thi trực tuyến & Danh sách thi dành cho sinh viên hoãn thi trong file đính kèm.",
+}
