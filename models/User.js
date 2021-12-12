@@ -9,23 +9,21 @@ const UserSchema = new mongoose.Schema(
       max: 50,
       unique: true,
     },
-    name:{
-      type:String,
+    authId: { type: String, unique: true },
+    password: {
+      type: String,
       required: true,
-      maxlength: 256
     },
     username: {
       type: String,
       required: true,
-      maxlength: 256,
-      unique: true
     },
-    password:{
-      type: String
-    }, 
-    role:{
+    password: {
       type: String,
-      required: true
+    },
+    role: {
+      type: String,
+      required: true,
     },
     profilePicture: {
       type: String,
@@ -36,6 +34,10 @@ const UserSchema = new mongoose.Schema(
       default: "",
     },
     city: {
+      type: String,
+      default: "",
+    },
+    faculty: {
       type: String,
       default: "",
     },
