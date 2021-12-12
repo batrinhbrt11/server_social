@@ -2,18 +2,18 @@ POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-    "username": "mtcn",
+    "username": "admin",
     "password": "123456"
 }
 
 ###
 GET http://localhost:5000/api/falcuty/notifications
-Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTczYjk3MGQ0NGRkNDI3M2VkMDBkNSIsImlhdCI6MTYzODM2ODQyNn0.gw4Sk7mMIInmL45HNikm92Lnkl8ior6Pebc4Wt0-iXA
-
+Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTczY2Q1MGQ0NGRkNDI3M2VkMDBkNyIsImlhdCI6MTYzODQ1MzYxMH0.3tHnaoBLncMl_eYNb65bMFvo0VO4gWv8wKpBLVI4Py0
+ 
 ###
-
+// Tạo thông báo mới
 POST http://localhost:5000/api/falcuty/notifications/create
-Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTczY2Q1MGQ0NGRkNDI3M2VkMDBkNyIsImlhdCI6MTYzODM2NzYzN30.PD4jR-aANaWcmhCKdIz9G7qiq7ClnptKv-yMm31mbJw
+Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTczY2Q1MGQ0NGRkNDI3M2VkMDBkNyIsImlhdCI6MTYzODQ1MzYxMH0.3tHnaoBLncMl_eYNb65bMFvo0VO4gWv8wKpBLVI4Py0
 Content-Type: application/json
 
 {
@@ -24,17 +24,22 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:5000/api/falcuty/notifications/61a781c30fb5189451ac44f0
-Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTczYjk3MGQ0NGRkNDI3M2VkMDBkNSIsImlhdCI6MTYzODM2ODg2NH0.eprVwIlRE09uI9oVq--x6c27EsVGZNy32Z_WvkA8Wlw
+GET http://localhost:5000/api/falcuty/notifications/61a861179ff19c90be751363
+Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTczY2Q1MGQ0NGRkNDI3M2VkMDBkNyIsImlhdCI6MTYzODQ1MzYxMH0.3tHnaoBLncMl_eYNb65bMFvo0VO4gWv8wKpBLVI4Py0
 
 
 ###
-
-PUT http://localhost:5000/api/falcuty/notifications/61a781c30fb5189451ac44f0
-Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTczYjk3MGQ0NGRkNDI3M2VkMDBkNSIsImlhdCI6MTYzODM3MDg3N30._HcoSxQzBeY-nYVRX2qkjPDw1NEqocJd_4zzIuTp5DU
+// Chỉnh sửa thông báo
+PUT http://localhost:5000/api/falcuty/notifications/61a861179ff19c90be751363
+Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTczYjk3MGQ0NGRkNDI3M2VkMDBkNSIsImlhdCI6MTYzODQyNDM5OH0.ckXR3-nwiUpKr5zZ-Uwa_lgvgKt_rkFZcaU8V-qnmCc
 Content-Type: application/json
 
 {
     "title": "Danh sách thi dành cho sinh viên hoãn thi",
-    "content": "Sinh viên xem Lịch thi trực tuyến & Danh sách thi dành cho sinh viên hoãn thi trong file đính kèm.",
+    "content": "Sinh viên xem Lịch thi trực tuyến & Danh sách thi dành cho sinh viên hoãn thi trong file đính kèm."
 }
+
+###
+// Xóa thông báo
+DELETE  http://localhost:5000/api/falcuty/notifications/61a860af9ff19c90be75135b
+Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTczYjk3MGQ0NGRkNDI3M2VkMDBkNSIsImlhdCI6MTYzODQyNDM5OH0.ckXR3-nwiUpKr5zZ-Uwa_lgvgKt_rkFZcaU8V-qnmCc

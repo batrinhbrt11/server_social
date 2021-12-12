@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const slug = require("mongoose-slug-generator");
+
+mongoose.plugin(slug);
 const Category = new mongoose.Schema(
     {
         name:{
@@ -7,9 +10,11 @@ const Category = new mongoose.Schema(
             maxlength: 256
         },
         slug: {
-            type: String
+            type: String,
+            slug: 'name',
+            unique: true
         }
-    },
-        { timestamps: true }
+    },        
+    { timestamps: true }
 )
-module.exports = mongoose.model("Falcuty", Falcuty);
+module.exports = mongoose.model("Category", Category);

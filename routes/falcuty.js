@@ -4,29 +4,18 @@ const Notification = require("../models/falcutyNotification");
 const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
+const checkLogin = require("../middlewares/checkLogin");
 dotenv.config();
-function checkLogin (req, res, next){
-    const authorizationHeaders = req.headers['authorization'];
-    const token = authorizationHeaders.split(' ')[1];
-    if(!token) res.status(401).json("You need to login");
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err,data) => {
-        if(err){
-            res.status(401).json("You need to login");
-        }
-        else{
-            req.data = await User.findById(data.id)
-            next();
-        }   
-    })
-}
 
+
+// Kiểm tra quyền văn phòng/khoa (Authorization)
 function checkFalcuty(req, res, next){
     role = req.data.role;
     if(role != "falcuty") res.status(403).json("You have not permission")
     next();
 }
 
-// Thông báo
+// Get all thông báo của phòng/khoa
 router.get('/notifications', checkLogin, checkFalcuty, async(req, res) => {
     try{
         const notifications = await Notification.find({falcutyId: req.data.id});
@@ -37,6 +26,7 @@ router.get('/notifications', checkLogin, checkFalcuty, async(req, res) => {
     }
 })
 
+// Get thông báo bằng _id của phòng/khoa 
 router.get('/notifications/:id', checkLogin, checkFalcuty, async (req, res) => {
     try{
         let id = req.params.id;
@@ -49,6 +39,8 @@ router.get('/notifications/:id', checkLogin, checkFalcuty, async (req, res) => {
     }
 })
 
+
+// Tạo thông báo mới
 router.post('/notifications/create', checkLogin, checkFalcuty, async(req,res) => {
     try{
         const newNotification = new Notification({
@@ -64,7 +56,7 @@ router.post('/notifications/create', checkLogin, checkFalcuty, async(req,res) =>
     }
 });
 
-// Update notification
+// Chỉnh sửa thông báo
 router.put('/notifications/:id', checkLogin, checkFalcuty, async (req, res) => {
     try{
         const id = req.params.id;
@@ -78,7 +70,7 @@ router.put('/notifications/:id', checkLogin, checkFalcuty, async (req, res) => {
     }
 })
 
-//Delete notification
+// Delete notification
 router.delete('/notifications/:id', checkLogin, checkFalcuty, async (req, res) => {
     try{
         const id = req.params.id;
@@ -92,4 +84,5 @@ router.delete('/notifications/:id', checkLogin, checkFalcuty, async (req, res) =
 
     }
 })
+
 module.exports = router;
