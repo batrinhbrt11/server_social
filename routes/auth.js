@@ -57,6 +57,7 @@ router.post("/login", async (req, res) => {
           _faculty: user.faculty,
         };
         var token = jwt.sign(a, _Config.SECRET);
+
         const res_data = { token, user };
         res.status(200).json(res_data);
       }

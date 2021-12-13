@@ -21,9 +21,11 @@ const UserSchema = new mongoose.Schema(
     password: {
       type: String,
     },
-    role: {
-      type: String,
+    authorize: {
+      type: Number,
+      enum: [1, 2, 3],
       required: true,
+      default: 3,
     },
     profilePicture: {
       type: String,

@@ -3,7 +3,6 @@ const _CONF = require("../common/config");
 //kiểm tra login
 const checkLogin = (req, res, next) => {
   token = req.body.token || req.query.token || req.headers["x-access-token"];
-
   jwt.verify(token, _CONF.SECRET, function (err, decoded) {
     if (err) {
       //if (err) throw new Error(err)
