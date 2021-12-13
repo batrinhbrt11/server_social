@@ -50,7 +50,7 @@ router.post("/notifications", checkLogin, checkFalcuty,async (req, res) => {
           res.status(200).json(savedNotification);
     } catch (error) {
         res.status(500).json(error);
-    }
+    } 
   }
 );
 

@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
-
+const Category = require("./Category");
+const User = require("./User");
+const referrenceValidator = require('mongoose-referrence-validator');
 const falNotification = new mongoose.Schema({
     title: {
         type: String,
@@ -12,12 +14,15 @@ const falNotification = new mongoose.Schema({
     },
     categoryId:{
         type: mongoose.Schema.Types.ObjectId,
-        required: true
+        required: true,
+        ref: 'Category'
     },
-    falcutyId:{
+    userId:{
         type: mongoose.Schema.Types.ObjectId,
-        required: true
+        required: true,
+        ref: 'User'
     }
 }, {timestamps: true});
 
+falNotification.plugin(referrenceValidator)
 module.exports = mongoose.model('FalNotification', falNotification);
