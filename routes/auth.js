@@ -28,6 +28,8 @@ router.post("/register", async (req, res) => {
       //save user and respond
       const user = await newUser.save();
       res.status(200).json(user);
+    } else {
+      res.status("403").json("Đã có user");
     }
     //hashed password
   } catch (err) {
