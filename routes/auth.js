@@ -8,7 +8,7 @@ const _Config = require("../common/config");
 //api/auth/register
 router.post("/register", async (req, res) => {
   try {
-    const checkUser = await User.findOne({
+      const checkUser = await User.findOne({
       email: "googleId:" + req.body.authId,
     });
     if (!checkUser) {
