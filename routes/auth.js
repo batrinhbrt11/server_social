@@ -8,8 +8,8 @@ const _Config = require("../common/config");
 //api/auth/register
 router.post("/register", async (req, res) => {
   try {
-      const checkUser = await User.findOne({
-      email: "googleId:" + req.body.authId,
+    const checkUser = await User.findOne({
+      authId: "googleId:" + req.body.authId,
     });
     if (!checkUser) {
       const salt = await bcrypt.genSalt(10);
@@ -17,6 +17,7 @@ router.post("/register", async (req, res) => {
 
       //create new user
       const newUser = new User({
+        name: req.body.name,
         username: req.body.username,
         authId: "googleId:" + req.body.authId,
         profilePicture: req.body.profilePicture,
@@ -39,8 +40,8 @@ router.post("/register", async (req, res) => {
 //api/auth/login
 router.post("/login", async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
-
+    const user = await User.findOne({ username: req.body.username });
+    console.log(req.body.username);
     if (!user) {
       res.status(400).json("user not found");
     } else {

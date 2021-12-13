@@ -4,7 +4,7 @@ const Notification = require("../models/falcutyNotification");
 const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
-const checkLogin = require("../middlewares/checkLogin");
+
 dotenv.config();
 function checkLogin(req, res, next) {
   token = req.body.token || req.query.token || req.headers["x-access-token"];
