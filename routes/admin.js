@@ -6,24 +6,26 @@ const checkLogin = require("../middlewares/checkLogin");
 // Tạo phòng/Khoa mới
 
 function checkAdmin(req, res, next){
-    role = req.data.role;
-    if(role != "admin") return res.status(403).json("You have not permission")
+    role = req.data.authorize;
+    if(role !== 1) return res.status(403).json("You have not permission")
     next();
 }
 
-router.post("/falcuties/create", async (req, res) => {    
+router.post("/falcuties", checkLogin, checkAdmin, async (req, res) => {    
     try{
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
         const newUser = new User({
-            email: req.body.name,
-            name: req.body.email,
-            role: "falcuty",
+            email: req.body.email,
+            name: req.body.name,
+            authorize: 2,
             username: req.body.username,
-            password: hashedPassword
+            password: hashedPassword,
+            categories: req.body.categories
         });
         const savedUser = await newUser.save();
-        res.status(200).json("success");
+        res.status(200).json(savedUser);
     }
     catch(err){ 
         res.status(500).json(err);

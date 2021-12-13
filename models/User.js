@@ -1,28 +1,30 @@
 const mongoose = require("mongoose");
-
+const Category = require("./Category");
+const referrenceValidator = require('mongoose-referrence-validator');
 const UserSchema = new mongoose.Schema(
   {
-    username: {
+    email: {
       type: String,
       require: true,
       min: 3,
       max: 50,
       unique: true,
     },
-    authId: { type: String, unique: true },
+    authId: { 
+      type: String,
+    },
     password: {
       type: String,
       required: true,
     },
-    email: {
-      type: String,
-    },
-    name: {
+    username: {
       type: String,
       required: true,
+      unique: true
     },
     password: {
       type: String,
+      required: true
     },
     authorize: {
       type: Number,
@@ -30,6 +32,9 @@ const UserSchema = new mongoose.Schema(
       required: true,
       default: 3,
     },
+    categories:[
+      {_id: { type: mongoose.Schema.Types.ObjectId, ref: Category.collection.collectionName }
+    }],
     profilePicture: {
       type: String,
       default: "",
@@ -39,10 +44,6 @@ const UserSchema = new mongoose.Schema(
       default: "",
     },
     city: {
-      type: String,
-      default: "",
-    },
-    faculty: {
       type: String,
       default: "",
     },
@@ -57,5 +58,5 @@ const UserSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
+UserSchema.plugin(referrenceValidator)
 module.exports = mongoose.model("User", UserSchema);
