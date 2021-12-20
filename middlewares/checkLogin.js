@@ -10,7 +10,7 @@ module.exports =  (req, res, next) => {
             res.status(401).json("You need to login");
         }
         else{
-            req.data = await User.findById(data.id)
+            req.data = await User.findById(data._id)
             next();
         }   
     })

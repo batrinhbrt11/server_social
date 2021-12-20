@@ -6,10 +6,19 @@ const checkLogin = require("../middlewares/checkLogin");
 // Tạo phòng/Khoa mới
 
 function checkAdmin(req, res, next){
-    role = req.data.authorize;
-    if(role !== 1) return res.status(403).json("You have not permission")
+    if(req.data.authorize !== 1) res.status(403).json("You have not permission")
     next();
 }
+
+router.get("/falcuties", checkLogin, checkAdmin, async (req, res) => {
+    try{
+        const falcuties = await User.find({authorize: 2}).select("-password").sort( { createdAt: -1 } );
+        res.status(200).json(falcuties);
+    }
+    catch(err){
+        res.status(500).json(err); 
+    }
+})
 
 router.post("/falcuties", checkLogin, checkAdmin, async (req, res) => {    
     try{
@@ -32,6 +41,8 @@ router.post("/falcuties", checkLogin, checkAdmin, async (req, res) => {
     }
 })
 
+
+
 //Tìm phòng/khoa
 router.get("/falcuties/:id", checkLogin, async (req, res) => {
     var id = req.params.id;
@@ -43,6 +54,8 @@ router.get("/falcuties/:id", checkLogin, async (req, res) => {
         res.status(403).json(err); 
     }
 })
+
+
 
 router.get("/categories", async (req, res) => {
     try{

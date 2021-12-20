@@ -3,6 +3,10 @@ const Category = require("./Category");
 const referrenceValidator = require('mongoose-referrence-validator');
 const UserSchema = new mongoose.Schema(
   {
+    name:{
+      type: String,
+      require: true
+    },
     email: {
       type: String,
       require: true,
