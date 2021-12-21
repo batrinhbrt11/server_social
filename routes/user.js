@@ -37,7 +37,6 @@ router.get("/", checkLogin, async (req, res, next) => {
 });
 //create user
 router.post("/", checkAdmin, async (req, res) => {
-  console.log(req.body);
   try {
     const checkUser = await User.findOne({
       username: req.body.username,
@@ -53,6 +52,7 @@ router.post("/", checkAdmin, async (req, res) => {
         email: req.body.email,
         password: hashedPassword,
         authorize: req.body.authorize,
+        faculty: req.body.faculty,
       });
 
       //save user and respond
@@ -84,6 +84,7 @@ router.put("/:id", checkUpdate, async (req, res) => {
         const newUser = await User.findByIdAndUpdate(req.params.id, {
           password: hashedPassword,
         });
+        await newUser.save();
         res.status(200).json("Account has been updated");
       }
     } catch (err) {
@@ -99,7 +100,7 @@ router.put("/:id", checkUpdate, async (req, res) => {
       // value.find((v) => {
       //   array.push(v.id);
       // });
-
+      await user.save();
       res.status(200).json("Account has been updated");
     } catch (err) {
       return res.status(500).json(err);
