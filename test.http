@@ -1,0 +1,46 @@
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "cntt",
+    "password": "123456"
+}
+
+###
+GET http://localhost:5000/api/falcuty/categories
+Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWI2ZjY5ZDMxOTUwOTEzMzk1NGE5NWYiLCJfYXV0aG9yaXplIjoyLCJpYXQiOjE2Mzk2Njk1ODB9.QUbH9f80MYetOTbNnbgSRXzFVya1TMNUtxJVebOJiv0
+ 
+###
+// Tạo thông báo mới
+POST http://localhost:5000/api/falcuty/notifications
+Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWI2ZjY5ZDMxOTUwOTEzMzk1NGE5NWYiLCJfYXV0aG9yaXplIjoyLCJpYXQiOjE2Mzk3NDM2MDF9.WpgrocCPS5fNQ8itwUf0w3n-cbQMHynwE_VpnP-3kYM
+Content-Type: application/json
+
+{
+    "title": "Thông báo đăng ký môn học HK2 - 2020/2021",
+    "content": "<p>đưqưdqưdqưd</p>",
+    "categoryId": "61b5ee5e4f159a40abcf9d69"
+}
+
+###
+
+GET http://localhost:5000/api/falcuty/notifications/61a861179ff19c90be751363
+Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTczY2Q1MGQ0NGRkNDI3M2VkMDBkNyIsImlhdCI6MTYzODQ1MzYxMH0.3tHnaoBLncMl_eYNb65bMFvo0VO4gWv8wKpBLVI4Py0
+
+
+###
+// Chỉnh sửa thông báo
+PUT http://localhost:5000/api/falcuty/notifications/61a861179ff19c90be751363
+Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTczYjk3MGQ0NGRkNDI3M2VkMDBkNSIsImlhdCI6MTYzODQyNDM5OH0.ckXR3-nwiUpKr5zZ-Uwa_lgvgKt_rkFZcaU8V-qnmCc
+Content-Type: application/json
+
+{
+    "title": "Danh sách thi dành cho sinh viên hoãn thi",
+    "content": "Sinh viên xem Lịch thi trực tuyến & Danh sách thi dành cho sinh viên hoãn thi trong file đính kèm."
+}
+
+###
+// Xóa thông báo
+GET  http://localhost:5000/api/admin/categories
+Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWI2ZjYzMDY0NDQzYmY0NGI1NWJiZGUiLCJfYXV0aG9yaXplIjoxLCJpYXQiOjE2Mzk0NzQ3NDV9.2QM3oqA4Q1blWM3KRn_trtaeFud-9nt6iHl2PE-5Uy0
+Content-Type: application/json
