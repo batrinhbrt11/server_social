@@ -11,49 +11,6 @@ function checkAdmin(req, res, next) {
   next();
 }
 
-router.get("/falcuties", checkLogin, checkAdmin, async (req, res) => {
-  try {
-    const falcuties = await User.find({ authorize: 2 })
-      .select("-password")
-      .sort({ createdAt: -1 });
-    res.status(200).json(falcuties);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-router.post("/falcuties", checkLogin, checkAdmin, async (req, res) => {
-  try {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
-    const newUser = new User({
-      email: req.body.email,
-      name: req.body.name,
-      authorize: 2,
-      username: req.body.username,
-      password: hashedPassword,
-      categories: req.body.categories,
-    });
-    const savedUser = await newUser.save();
-    res.status(200).json(savedUser);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-//Tìm phòng/khoa
-router.get("/falcuties/:id", checkLogin, async (req, res) => {
-  var id = req.params.id;
-  try {
-    const falcuty = await Falcuty.findById(id).populate("user", {
-      password: 0,
-    });
-    res.status(200).json(falcuty);
-  } catch (err) {
-    res.status(403).json(err);
-  }
-});
 //get  categories
 router.get("/categories", async (req, res) => {
   try {
@@ -119,7 +76,15 @@ router.delete(
 
 router.get("/faculties", async (req, res) => {
   try {
-    const faculties = await Faculty.find();
+    const faculty = await Faculty.find();
+    res.status(200).json(faculty);
+  } catch (error) {
+    res.status(400).json({ code: 400, message: "Đã có lỗi" });
+  }
+});
+router.get("/faculties/:id", async (req, res) => {
+  try {
+    const faculties = await Faculty.findById(req.params.id);
     res.status(200).json(faculties);
   } catch (error) {
     res.status(400).json({ code: 400, message: "Đã có lỗi" });

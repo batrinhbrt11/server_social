@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Post = require("../models/Post");
 const User = require("../models/User");
+const Comment = require("../models/Comment");
 const {
   checkLogin,
   checkUpdate,
@@ -58,6 +59,7 @@ router.delete("/:id", async (req, res) => {
     const post = await Post.findById(req.params.id);
     if (post.userId === req.body.userId) {
       await post.deleteOne();
+      await Comment.deleteMany({ postId: req.params.id });
       res.status(200).json("the post has been delete");
     } else {
       res.status(403).json("you can delete only your post");

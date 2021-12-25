@@ -7,33 +7,18 @@ const {
   checkAdmin,
   checkFaculty,
 } = require("../Middleware/checktoken");
+const Faculty = require("../models/Faculty");
+const Category = require("../models/Category");
 //get user
 const PAGE_SIZE = 10;
 router.get("/", checkLogin, async (req, res, next) => {
-  var page = req.query.page;
-  if (page) {
-    //get page
-    page = parseInt(page);
-    const skip_item = (page - 1) * PAGE_SIZE;
-    User.find({})
-      .skip(skip_item)
-      .limit(PAGE_SIZE)
-      .then((data) => {
-        res.json(data);
-      })
-      .catch((err) => {
-        return res.status(500).json(err);
-      });
-  } else {
-    //get all
-    User.find({})
-      .then((data) => {
-        res.json(data);
-      })
-      .catch((err) => {
-        return res.status(500).json(err);
-      });
-  }
+  User.find({})
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      return res.status(500).json(err);
+    });
 });
 //create user
 router.post("/", checkAdmin, async (req, res) => {
@@ -46,18 +31,37 @@ router.post("/", checkAdmin, async (req, res) => {
       const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
       //create new user
-      const newUser = new User({
-        name: req.body.name,
-        username: req.body.username,
-        email: req.body.email,
-        password: hashedPassword,
-        authorize: req.body.authorize,
-        faculty: req.body.faculty,
-      });
 
-      //save user and respond
-      const user = await newUser.save();
-      res.status(200).json(user);
+      if (req.body.authorize === "2") {
+        const checkFac = await Faculty.findOne({ _id: req.body.faculty });
+        const checkCate = await Category.findOne({ name: checkFac.name });
+        const newUser = new User({
+          name: req.body.name,
+          username: req.body.username,
+          email: req.body.email,
+          password: hashedPassword,
+          authorize: req.body.authorize,
+          faculty: req.body.faculty,
+          categories: [{ _id: checkCate._id }],
+        });
+
+        //save user and respond
+        const user = await newUser.save();
+
+        res.status(200).json(user);
+      } else {
+        const newUser = new User({
+          name: req.body.name,
+          username: req.body.username,
+          email: req.body.email,
+          password: hashedPassword,
+          authorize: req.body.authorize,
+        });
+
+        //save user and respond
+        const user = await newUser.save();
+        res.status(200).json(user);
+      }
     } else {
       res.status("403").json("Đã có user");
     }
@@ -69,6 +73,7 @@ router.post("/", checkAdmin, async (req, res) => {
 });
 //update user
 router.put("/:id", checkUpdate, async (req, res) => {
+  console.log(req.body);
   if (req.body.password && req.body.newPassword) {
     try {
       const user = await User.findById(req.params.id);
@@ -95,12 +100,9 @@ router.put("/:id", checkUpdate, async (req, res) => {
       const user = await User.findByIdAndUpdate(req.params.id, {
         $set: req.body,
       });
-      // const value = req.body.value;
-      // let array = [];
-      // value.find((v) => {
-      //   array.push(v.id);
-      // });
+
       await user.save();
+
       res.status(200).json("Account has been updated");
     } catch (err) {
       return res.status(500).json(err);
@@ -185,7 +187,7 @@ router.put("/:id/unfollow", async (req, res) => {
 router.get("/friends/:userId", checkLogin, async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
-    console.log(user.followers);
+
     const friends = await Promise.all(
       user.followers.map((friendId) => {
         return User.findById(friendId);

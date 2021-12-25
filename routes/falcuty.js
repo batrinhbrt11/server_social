@@ -3,11 +3,11 @@ const User = require("../models/User");
 const Notification = require("../models/falcutyNotification");
 const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
+1;
 const Category = require("../models/Category");
 const jwt = require("jsonwebtoken");
 const checkLogin = require("../middlewares/checkLogin");
 dotenv.config();
-
 
 function checkFalcuty(req, res, next) {
   let authorize = req.data.authorize;
@@ -17,19 +17,20 @@ function checkFalcuty(req, res, next) {
 
 // Thông báo
 router.get("/notifications", checkLogin, checkFalcuty, async (req, res) => {
+  console.log("dsdas");
   try {
     const notifications = await Notification.aggregate([
-      {$match: {userId: req.data._id} },
-      { $sort : { createdAt: -1 } },
+      { $match: { userId: req.data._id } },
+      { $sort: { createdAt: -1 } },
       {
-        $lookup:
-        {
+        $lookup: {
           from: "categories",
           localField: "categoryId",
           foreignField: "_id",
-          as:"category"
-        }
-    }]);
+          as: "category",
+        },
+      },
+    ]);
     res.status(200).json(notifications);
   } catch (error) {
     res.status(500).json(error);
@@ -52,15 +53,14 @@ router.get("/categories", checkLogin, checkFalcuty, async (req, res) => {
     const user = await User.aggregate([
       { $match: { _id: req.data._id } },
       {
-        $lookup:
-        {
+        $lookup: {
           from: "categories",
           localField: "categories._id",
           foreignField: "_id",
-          as: "category"
-        }
+          as: "category",
+        },
       },
-      {$project: {_id: 0, category: 1}}
+      { $project: { _id: 0, category: 1 } },
     ]);
     if (!user) res.status(404).json("Not found");
     res.status(200).json(user[0].category);
@@ -70,23 +70,27 @@ router.get("/categories", checkLogin, checkFalcuty, async (req, res) => {
 });
 
 router.post("/notifications", checkLogin, checkFalcuty, async (req, res) => {
-    try {
-        const checkCategory = await User.findOne({categories: {_id: req.body.categoryId}});
-        if(!checkCategory) res.status(200).json({code: -1, message: "Bạn không có quyền đăng thông báo cho chuyên mục này."});
-        const newNotification = new Notification({
-            title: req.body.title,
-            content: req.body.content,
-            categoryId: req.body.categoryId,
-            userId: req.data._id,
-          });
-          const savedNotification = await newNotification.save();
-          res.status(200).json({code: 1, message: "Thành công"});
-    } catch (error) {
-        res.status(400).json("Vui lòng nhập đầy đủ thông tin.");
-        console.log("1111")
-    } 
+  try {
+    const checkCategory = await User.findOne({
+      categories: { _id: req.body.categoryId },
+    });
+    if (!checkCategory)
+      res.status(200).json({
+        code: -1,
+        message: "Bạn không có quyền đăng thông báo cho chuyên mục này.",
+      });
+    const newNotification = new Notification({
+      title: req.body.title,
+      content: req.body.content,
+      categoryId: req.body.categoryId,
+      userId: req.data._id,
+    });
+    const savedNotification = await newNotification.save();
+    res.status(200).json({ code: 1, message: "Thành công" });
+  } catch (error) {
+    res.status(400).json("Vui lòng nhập đầy đủ thông tin.");
   }
-);
+});
 
 // Update notification
 router.put("/notifications/:id", checkLogin, checkFalcuty, async (req, res) => {
@@ -97,21 +101,42 @@ router.put("/notifications/:id", checkLogin, checkFalcuty, async (req, res) => {
       falcutyId: req.data.id,
     });
     //Validate input
-    if(!req.body.title || req.body.title.length === 0 || !req.body.content || req.body.content.length === 0 || !req.body.categoryId || req.body.categoryId.length === 0 ) {
-      res.status(200).json({code: 0, message: `Vui lòng điền đầy đủ thông tin.`});
+    if (
+      !req.body.title ||
+      req.body.title.length === 0 ||
+      !req.body.content ||
+      req.body.content.length === 0 ||
+      !req.body.categoryId ||
+      req.body.categoryId.length === 0
+    ) {
+      res
+        .status(200)
+        .json({ code: 0, message: `Vui lòng điền đầy đủ thông tin.` });
     }
-    //Kiểm tra thông báo có tồn tại không 
-    if (!notification) res.status(200).json({code: -1, message: "Thông báo không tồn tại."})
+    //Kiểm tra thông báo có tồn tại không
+    if (!notification)
+      res.status(200).json({ code: -1, message: "Thông báo không tồn tại." });
 
     //Kiểm tra người dùng có quyền đăng vào chuyên mục này không
-    const checkCategory = await User.findOne({categories: {_id: req.body.categoryId}});
-    if(!checkCategory) res.status(200).json({code: -1, message: "Bạn không có quyền đăng thông báo cho chuyên mục này."});
+    const checkCategory = await User.findOne({
+      categories: { _id: req.body.categoryId },
+    });
+    if (!checkCategory)
+      res.status(200).json({
+        code: -1,
+        message: "Bạn không có quyền đăng thông báo cho chuyên mục này.",
+      });
     await notification.updateOne({
       $set: { title: req.body.title, content: req.body.content },
     });
-    res.status(200).json({code: 1, message: `Thông báo "${notification.title}" đã được cập nhật thành công`});
+    res.status(200).json({
+      code: 1,
+      message: `Thông báo "${notification.title}" đã được cập nhật thành công`,
+    });
   } catch (error) {
-    res.status(200).json({code: 0, message: `Vui lòng điền đầy đủ thông tin.`});
+    res
+      .status(200)
+      .json({ code: 0, message: `Vui lòng điền đầy đủ thông tin.` });
   }
 });
 
@@ -129,7 +154,9 @@ router.delete(
       });
       if (!notification) res.status(404).json("Not found");
       notification.deleteOne().then((data) => {
-        res.status(200).json(`Xóa thông báo "${notification.title}" thành công.`);
+        res
+          .status(200)
+          .json(`Xóa thông báo "${notification.title}" thành công.`);
       });
     } catch (error) {}
   }
