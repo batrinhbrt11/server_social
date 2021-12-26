@@ -3,6 +3,8 @@ const Category = require("./Category");
 const User = require("./User");
 const referrenceValidator = require('mongoose-referrence-validator');
 const { text } = require("express");
+const slug = require("mongoose-slug-generator");
+mongoose.plugin(slug);
 const falNotification = new mongoose.Schema({
     title: {
         type: String,
@@ -24,6 +26,11 @@ const falNotification = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'User'
+    },
+    slug: {
+        type: String,
+        slug: 'title',
+        unique: true
     }
 }, {timestamps: true});
 

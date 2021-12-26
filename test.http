@@ -5,21 +5,38 @@ Content-Type: application/json
     "username": "cntt",
     "password": "123456"
 }
-
 ###
-GET http://localhost:5000/api/falcuty/categories
-Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWI2ZjY5ZDMxOTUwOTEzMzk1NGE5NWYiLCJfYXV0aG9yaXplIjoyLCJpYXQiOjE2Mzk2Njk1ODB9.QUbH9f80MYetOTbNnbgSRXzFVya1TMNUtxJVebOJiv0
- 
+POST http://localhost:5000/api/admin/falcuties
+Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWMyMWVkMWNmYTEzNWQ4MDRjMTMyOWMiLCJfYXV0aG9yaXplIjoxLCJpYXQiOjE2NDAxMTE4NjR9.xBak8tJ29TseSpuJcKvwM7xRHvtksO5H064AFjVh1dM
+Content-Type: application/json
+
+{
+    "name": "Khoa công nghệ thông tin",
+    "email": "cntt@tdtu.edu.vn",
+    "username": "cntt",
+    "password": "123456",
+    "categories": [
+        {"_id": "61c21f3acfa135d804c132a0"}
+    ]
+}
+###
+POST http://localhost:5000/api/admin/categories/add
+Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWMyMWVkMWNmYTEzNWQ4MDRjMTMyOWMiLCJfYXV0aG9yaXplIjoxLCJpYXQiOjE2NDAxMTE4NjR9.xBak8tJ29TseSpuJcKvwM7xRHvtksO5H064AFjVh1dM
+Content-Type: application/json
+
+{
+    "name": "Khoa công nghệ thông tin"
+}
 ###
 // Tạo thông báo mới
 POST http://localhost:5000/api/falcuty/notifications
-Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWI2ZjY5ZDMxOTUwOTEzMzk1NGE5NWYiLCJfYXV0aG9yaXplIjoyLCJpYXQiOjE2Mzk3NDM2MDF9.WpgrocCPS5fNQ8itwUf0w3n-cbQMHynwE_VpnP-3kYM
+Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWMyMWY5Y2NmYTEzNWQ4MDRjMTMyYTQiLCJfYXV0aG9yaXplIjoyLCJpYXQiOjE2NDAxMTMwMzF9.BDWjrsSAN2TneoZ-rzz_psxwQgVipzIiunIUs4KCcF0
 Content-Type: application/json
 
 {
     "title": "Thông báo đăng ký môn học HK2 - 2020/2021",
     "content": "<p>đưqưdqưdqưd</p>",
-    "categoryId": "61b5ee5e4f159a40abcf9d69"
+    "categoryId": "61c21f3acfa135d804c132a0"
 }
 
 ###
