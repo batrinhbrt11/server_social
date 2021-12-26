@@ -54,13 +54,14 @@ router.post("/login", async (req, res) => {
       if (!validPassword) {
         res.status(404).json("wrong password");
       } else {
+        delete user.password
         const a = {
           _id: user._id,
           _authorize: user.authorize,
         };
+        
         var token = jwt.sign(a, _Config.SECRET);
-
-        const res_data = { token, user };
+        const res_data = { token, user};
         res.status(200).json(res_data);
       }
     }
