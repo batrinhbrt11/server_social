@@ -9,6 +9,7 @@ const authRoute = require("./routes/auth");
 const adminRoute = require("./routes/admin");
 const falcutyRoute = require("./routes/falcuty");
 const commentRoute = require("./routes/comment");
+const notificationRoute = require("./routes/notification");
 const post = require("./routes/post");
 const socketio = require("socket.io");
 const jwt = require("jsonwebtoken");
@@ -33,6 +34,8 @@ app.use("/api/posts", post);
 app.use("/api/falcuty", falcutyRoute);
 app.use("/api/admin", adminRoute);
 app.use("/api/comments", commentRoute);
+app.use("/api/notifications", notificationRoute);
+
 
 const server = app.listen(PORT, () => {
   console.log("server is running 5000");
