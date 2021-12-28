@@ -6,19 +6,10 @@ Content-Type: application/json
     "password": "123456"
 }
 ###
-POST http://localhost:5000/api/admin/falcuties
-Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWMyMWVkMWNmYTEzNWQ4MDRjMTMyOWMiLCJfYXV0aG9yaXplIjoxLCJpYXQiOjE2NDAxMTE4NjR9.xBak8tJ29TseSpuJcKvwM7xRHvtksO5H064AFjVh1dM
-Content-Type: application/json
+GET http://localhost:5000/api/notifications/falcuty/61c2d
+Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWMyMWY5Y2NmYTEzNWQ4MDRjMTMyYTQiLCJfYXV0aG9yaXplIjoyLCJpYXQiOjE2NDA2MDI1MTd9.pH5WUrIPD0Azi0ZBUeUf_1BjPfVb5NO_-4lByPkVTcI
 
-{
-    "name": "Khoa công nghệ thông tin",
-    "email": "cntt@tdtu.edu.vn",
-    "username": "cntt",
-    "password": "123456",
-    "categories": [
-        {"_id": "61c21f3acfa135d804c132a0"}
-    ]
-}
+
 ###
 POST http://localhost:5000/api/admin/categories/add
 Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWMyMWVkMWNmYTEzNWQ4MDRjMTMyOWMiLCJfYXV0aG9yaXplIjoxLCJpYXQiOjE2NDAxMTE4NjR9.xBak8tJ29TseSpuJcKvwM7xRHvtksO5H064AFjVh1dM
