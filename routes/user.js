@@ -32,36 +32,17 @@ router.post("/", checkAdmin, async (req, res) => {
 
       //create new user
 
-      if (req.body.authorize === "2") {
-        const checkFac = await Faculty.findOne({ _id: req.body.faculty });
-        const checkCate = await Category.findOne({ name: checkFac.name });
-        const newUser = new User({
-          name: req.body.name,
-          username: req.body.username,
-          email: req.body.email,
-          password: hashedPassword,
-          authorize: req.body.authorize,
-          faculty: req.body.faculty,
-          categories: [{ _id: checkCate._id }],
-        });
+      const newUser = new User({
+        name: req.body.name,
+        username: req.body.username,
+        email: req.body.email,
+        password: hashedPassword,
+        authorize: req.body.authorize,
+      });
 
-        //save user and respond
-        const user = await newUser.save();
-
-        res.status(200).json(user);
-      } else {
-        const newUser = new User({
-          name: req.body.name,
-          username: req.body.username,
-          email: req.body.email,
-          password: hashedPassword,
-          authorize: req.body.authorize,
-        });
-
-        //save user and respond
-        const user = await newUser.save();
-        res.status(200).json(user);
-      }
+      //save user and respond
+      const user = await newUser.save();
+      res.status(200).json(user);
     } else {
       res.status("403").json("Đã có user");
     }
@@ -73,7 +54,6 @@ router.post("/", checkAdmin, async (req, res) => {
 });
 //update user
 router.put("/:id", checkUpdate, async (req, res) => {
-  console.log(req.body);
   if (req.body.password && req.body.newPassword) {
     try {
       const user = await User.findById(req.params.id);

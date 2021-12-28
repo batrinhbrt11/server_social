@@ -22,7 +22,7 @@ const createComment = async (req, res) => {
 const getCommentByPostId = async (req, res) => {
   try {
     const comments = await Comment.find({ postId: req.params.postId });
-    console.log(req.params.postId);
+
     const listComments = comments.sort((p1, p2) => {
       return new Date(p1.createdAt) - new Date(p2.createdAt);
     });

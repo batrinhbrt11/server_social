@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const User = require("../models/User");
 const Notification = require("../models/falcutyNotification");
+const Category = require("../models/Category");
 const dotenv = require("dotenv");
 1;
 const checkLogin = require("../middlewares/checkLogin");
@@ -9,13 +10,12 @@ dotenv.config();
 
 function checkFalcuty(req, res, next) {
   let authorize = req.data.authorize;
-  if (authorize !== 2) res.status(403).json("You have not permission");
+  if (authorize !== 2) return res.status(403).json("You have not permission");
   next();
 }
 
 // Thông báo
 router.get("/notifications", checkLogin, checkFalcuty, async (req, res) => {
-  console.log("dsdas");
   try {
     const notifications = await Notification.aggregate([
       { $match: { userId: req.data._id } },
@@ -68,22 +68,36 @@ router.get("/categories", checkLogin, checkFalcuty, async (req, res) => {
 });
 
 router.post("/notifications", checkLogin, checkFalcuty, async (req, res) => {
-    try {
-        const checkCategory = await User.findOne({categories: {_id: req.body.categoryId}, _id: req.data._id});
-        if(!checkCategory) res.status(200).json({code: -1, message: "Bạn không có quyền đăng thông báo cho chuyên mục này."});
-        const newNotification = new Notification({
-            title: req.body.title,
-            content: req.body.content,
-            categoryId: req.body.categoryId,
-            userId: req.data._id,
-          });
-          const savedNotification = await newNotification.save();
-          let msg = `<a href ='${savedNotification.slug}'>${req.data.name} vừa đăng thông báo "${savedNotification.title}"</a>`;
-          res.status(200).json({code: 1, message: { url: savedNotification.slug, falcutyName: req.data.name, title: savedNotification.title}});
-          console.log(msg)
-        } catch (error) {
-        res.status(400).json("Vui lòng nhập đầy đủ thông tin.");
-    } 
+  try {
+    const checkCategory = await User.findOne({
+      categories: { _id: req.body.categoryId },
+      _id: req.data._id,
+    });
+    if (!checkCategory)
+      res.status(200).json({
+        code: -1,
+        message: "Bạn không có quyền đăng thông báo cho chuyên mục này.",
+      });
+    const newNotification = new Notification({
+      title: req.body.title,
+      content: req.body.content,
+      categoryId: req.body.categoryId,
+      userId: req.data._id,
+    });
+
+    const savedNotification = await newNotification.save();
+    let msg = `<a href ='${savedNotification.slug}'>${req.data.name} vừa đăng thông báo "${savedNotification.title}"</a>`;
+    res.status(200).json({
+      code: 1,
+      message: {
+        url: savedNotification.slug,
+        cateName: req.data.name,
+        title: savedNotification.title,
+      },
+    });
+  } catch (error) {
+    res.status(400).json("Vui lòng nhập đầy đủ thông tin.");
+  }
 });
 
 // Update notification
@@ -121,7 +135,11 @@ router.put("/notifications/:id", checkLogin, checkFalcuty, async (req, res) => {
         message: "Bạn không có quyền đăng thông báo cho chuyên mục này.",
       });
     await notification.updateOne({
-      $set: { title: req.body.title, content: req.body.content, categoryId: req.body.categoryId },
+      $set: {
+        title: req.body.title,
+        content: req.body.content,
+        categoryId: req.body.categoryId,
+      },
     });
     res.status(200).json({
       code: 1,

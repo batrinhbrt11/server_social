@@ -76,7 +76,8 @@ router.delete(
 
 router.get("/faculties", async (req, res) => {
   try {
-    const faculty = await Faculty.find();
+    const user = await User.find();
+    const faculty = user.filter((u) => u.authorize === 2);
     res.status(200).json(faculty);
   } catch (error) {
     res.status(400).json({ code: 400, message: "Đã có lỗi" });
@@ -84,60 +85,11 @@ router.get("/faculties", async (req, res) => {
 });
 router.get("/faculties/:id", async (req, res) => {
   try {
-    const faculties = await Faculty.findById(req.params.id);
-    res.status(200).json(faculties);
+    const faculties = await User.findById(req.params.id);
+    res.status(200).json(faculties.name);
   } catch (error) {
     res.status(400).json({ code: 400, message: "Đã có lỗi" });
   }
 });
-//update faculty
-router.put("/faculties/:id", checkLogin, checkAdmin, async (req, res) => {
-  try {
-    const fac = await Faculty.findById(req.params.id);
-    await fac.updateOne({ name: req.body.name.toUpperCase() });
-    res.status(200).json(fac);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-//add faculty
-router.post("/faculties/add", checkLogin, checkAdmin, async (req, res) => {
-  try {
-    const checkFac = await Faculty.findOne({
-      name: req.body.name.toUpperCase(),
-    });
-    if (checkFac) {
-      res.status("403").json("Đã có user");
-    } else {
-      const fac = new Faculty({
-        name: req.body.name.toUpperCase(),
-      });
-      await fac.save();
-      const category = new Category({
-        name: req.body.name.toUpperCase(),
-      });
-      await category.save();
-      res.status(200).json(fac);
-    }
-  } catch (error) {
-    res.status(400).json({ code: 400, message: "Đã có lỗi" });
-  }
-});
-//delete category
-router.delete("/faculties/delete", checkLogin, checkAdmin, async (req, res) => {
-  try {
-    const deleteIds = req.body.ids;
 
-    await Faculty.deleteMany({ _id: { $in: deleteIds } });
-    Faculty.find({})
-      .then((data) => {
-        res.status(200).json(data);
-      })
-      .catch((err) => {
-        return res.status(500).json(err);
-      });
-  } catch (err) {
-    return res.status(500).json(err);
-  }
-});
 module.exports = router;

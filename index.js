@@ -38,7 +38,6 @@ const server = app.listen(PORT, () => {
   console.log("server is running 5000");
 });
 
-
 // Setup socket.io
 const io = socketio(server);
 
@@ -49,16 +48,13 @@ io.use(async (socket, next) => {
     socket.userId = payload._id;
     next();
   } catch (err) {
-    console.log("lỗi")
+    console.log("lỗi");
   }
 });
 
-io.on('connection', (socket) => {
-  console.log(`${socket.userId} connected`);
-  socket.on("postNoification", ({message}) => {
-      io.emit("newNotification", message)
-      console.log(`received: ${message}`);
-  })
-  socket.on('disconnect', () => {
-  })
-})
+io.on("connection", (socket) => {
+  socket.on("postNoification", ({ message }) => {
+    io.emit("newNotification", message);
+  });
+  socket.on("disconnect", () => {});
+});
