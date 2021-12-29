@@ -7,8 +7,7 @@ const {
   checkAdmin,
   checkFaculty,
 } = require("../Middleware/checktoken");
-const Faculty = require("../models/Faculty");
-const Category = require("../models/Category");
+
 //get user
 const PAGE_SIZE = 10;
 router.get("/", checkLogin, async (req, res, next) => {

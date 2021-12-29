@@ -86,12 +86,14 @@ router.post("/notifications", checkLogin, checkFalcuty, async (req, res) => {
     });
 
     const savedNotification = await newNotification.save();
-    let msg = `<a href ='${savedNotification.slug}'>${req.data.name} vừa đăng thông báo "${savedNotification.title}"</a>`;
+    const cate = await Category.findById(req.body.categoryId);
+    const cateName = cate.name;
+    let msg = `<a href ='${savedNotification.slug}'>${cateName} vừa đăng thông báo "${savedNotification.title}"</a>`;
     res.status(200).json({
       code: 1,
       message: {
         url: savedNotification.slug,
-        cateName: req.data.name,
+        cateName: cateName,
         title: savedNotification.title,
       },
     });

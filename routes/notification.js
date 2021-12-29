@@ -1,41 +1,68 @@
 const router = require("express").Router();
-
 const Notification = require("../models/falcutyNotification");
 const auth = require("../middlewares/checkLogin");
-
+const Category = require("../models/Category");
 router.get("/", auth, async (req, res) => {
-    try{
-        const page = req.query.page;
-        const notifications = await Notification.find().sort({createdAt: -1});
-        if(page > 0){
-            const result = await notifications.slice(0, page);
-            console.log(result);
-            res.status(200).json({code: 1, notifications: result});
-        }
-        res.status(200).json({code: 1, notifications});
-    } catch(err){
-        res.status(200).json({code: 0});
+  try {
+    const page = req.query.page;
+    const notifications = await Notification.find().sort({ createdAt: -1 });
+    if (page > 0) {
+      const result = await notifications.slice(0, page);
+
+      return res.status(200).json(result);
     }
-    
-})
-
-router.get("/:slug", auth, async (req, res) => {
-    const notification = await Notification.findOne({slug: req.params.slug});
-    if(!notification) res.status(200).json({code: 404});
-    res.status(200).json({code: 1, notification});
-})
-
-router.get("/falcuty/:id", auth, async(req, res) => {
-    try{
-        const notifications = await Notification.find({userId: req.params.id});
-        if(!notifications){
-            res.status(200).json({code: 404});
-        }
-        res.status(200).json({code: 1, notifications});
-    } catch(error){
-        res.status(200).json({code: 404});
+    res.status(200).json(notifications);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+const PAGE_SIZE = 10;
+router.get("/cate/:slug", auth, async (req, res) => {
+  try {
+    const cate = await Category.findOne({ slug: req.params.slug });
+    const notifications = await Notification.find({
+      categoryId: cate._id,
+    }).sort({
+      createdAt: -1,
+    });
+    const page = req.query.page;
+    if (page) {
+      const skip_item = (page - 1) * PAGE_SIZE;
+      const end_item = page * PAGE_SIZE;
+      const result = notifications.slice(skip_item, end_item);
+      console.log(notifications.length);
+      return res
+        .status(200)
+        .json({ cate: cate, notifications: result, len: notifications.length });
     }
-    
-})
+    res.status(200).json({ cate: cate, notifications: notifications });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
+router.get("/falcuty/:id", auth, async (req, res) => {
+  try {
+    const notifications = await Notification.find({ userId: req.params.id });
+    if (!notifications) {
+      return res.status(404).json("Không tồn tại thông báo");
+    }
+    res.status(200).json(notifications);
+  } catch (error) {
+    res.status(500).json(err);
+  }
+});
+router.get("/:id", auth, async (req, res) => {
+  try {
+    const notifications = await Notification.findById(req.params.id);
+    if (!notifications) {
+      return res.status(404).json("Không tồn tại thông báo");
+    }
+    const cate = await Category.findById(notifications.categoryId);
+
+    res.status(200).json({ cateName: cate.name, notifications: notifications });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 module.exports = router;

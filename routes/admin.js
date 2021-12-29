@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const Category = require("../models/Category");
 const checkLogin = require("../middlewares/checkLogin");
-const Faculty = require("../models/Faculty");
+
 // Tạo phòng/Khoa mới
 
 function checkAdmin(req, res, next) {
@@ -15,6 +15,14 @@ function checkAdmin(req, res, next) {
 router.get("/categories", async (req, res) => {
   try {
     const categories = await Category.find();
+    res.status(200).json(categories);
+  } catch (error) {
+    res.status(400).json({ code: 400, message: "Đã có lỗi" });
+  }
+});
+router.get("/categories/:id", async (req, res) => {
+  try {
+    const categories = await Category.findById(req.params.id);
     res.status(200).json(categories);
   } catch (error) {
     res.status(400).json({ code: 400, message: "Đã có lỗi" });
