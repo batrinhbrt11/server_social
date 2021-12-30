@@ -56,6 +56,7 @@ io.use(async (socket, next) => {
 });
 
 io.on("connection", (socket) => {
+  console.log(`${socket.userId} connected`)
   socket.on("postNoification", ({ message }) => {
     io.emit("newNotification", message);
   });

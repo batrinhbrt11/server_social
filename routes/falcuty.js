@@ -67,6 +67,7 @@ router.get("/categories", checkLogin, checkFalcuty, async (req, res) => {
   }
 });
 
+//Đăng bài thông báo
 router.post("/notifications", checkLogin, checkFalcuty, async (req, res) => {
   try {
     const checkCategory = await User.findOne({
@@ -88,12 +89,13 @@ router.post("/notifications", checkLogin, checkFalcuty, async (req, res) => {
     const savedNotification = await newNotification.save();
     const cate = await Category.findById(req.body.categoryId);
     const cateName = cate.name;
-    let msg = `<a href ='${savedNotification.slug}'>${cateName} vừa đăng thông báo "${savedNotification.title}"</a>`;
+    let msg = `<a href ='${savedNotification.slug}'>${req.data.name} vừa đăng thông báo "${savedNotification.title}"</a>`;
+    console.log(msg);
     res.status(200).json({
       code: 1,
       message: {
         url: savedNotification.slug,
-        cateName: cateName,
+        name: req.data.name,
         title: savedNotification.title,
       },
     });
