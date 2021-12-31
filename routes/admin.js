@@ -41,14 +41,15 @@ router.put("/categories/:id", checkLogin, checkAdmin, async (req, res) => {
 //add category
 router.post("/categories/add", checkLogin, checkAdmin, async (req, res) => {
   try {
-    const checkCate = await Category.findOne({
-      name: req.body.name.toUpperCase(),
-    });
+    const categories = await Category.find();
+    const checkCate = categories.find(
+      (cate) => cate.name.toLowerCase() === req.body.name.toLowerCase()
+    );
     if (checkCate) {
-      res.status("403").json("Đã có user");
+      res.status("403").json("Đã có danh mục");
     } else {
       const category = new Category({
-        name: req.body.name.toUpperCase(),
+        name: req.body.name,
       });
       await category.save();
       res.status(200).json(category);

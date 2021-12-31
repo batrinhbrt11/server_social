@@ -25,7 +25,11 @@ router.post("/", checkAdmin, async (req, res) => {
     const checkUser = await User.findOne({
       username: req.body.username,
     });
-    if (!checkUser) {
+    const users = await User.find();
+    const checkUserName = users.find(
+      (user) => user.name.toLowerCase() === req.body.name.toLowerCase()
+    );
+    if (!checkUserName || checkUser) {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
@@ -48,7 +52,6 @@ router.post("/", checkAdmin, async (req, res) => {
     //hashed password
   } catch (err) {
     res.status(500).json(err);
-    console.log(err);
   }
 });
 //update user
