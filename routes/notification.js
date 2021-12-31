@@ -30,7 +30,7 @@ router.get("/cate/:slug", auth, async (req, res) => {
       const skip_item = (page - 1) * PAGE_SIZE;
       const end_item = page * PAGE_SIZE;
       const result = notifications.slice(skip_item, end_item);
-      console.log(notifications.length);
+
       return res
         .status(200)
         .json({ cate: cate, notifications: result, len: notifications.length });
@@ -60,7 +60,7 @@ router.get("/:id", auth, async (req, res) => {
     }
     const cate = await Category.findById(notifications.categoryId);
 
-    res.status(200).json({ cateName: cate.name, notifications: notifications });
+    res.status(200).json({ cate: cate, notifications: notifications });
   } catch (err) {
     res.status(500).json(err);
   }
