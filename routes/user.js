@@ -188,8 +188,8 @@ router.get("/friends/:userId", checkLogin, async (req, res) => {
 
     let friendList = [];
     friends.map((friend) => {
-      const { _id, name, profilePicture } = friend;
-      friendList.push({ _id, name, profilePicture });
+      const { _id, name, profilePicture, username } = friend;
+      friendList.push({ _id, name, profilePicture, username });
     });
     res.status(200).json(friendList);
   } catch (err) {

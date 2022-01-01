@@ -2,6 +2,7 @@ const router = require("express").Router();
 const Notification = require("../models/falcutyNotification");
 const auth = require("../middlewares/checkLogin");
 const Category = require("../models/Category");
+const PAGE_SIZE = 10;
 router.get("/", auth, async (req, res) => {
   try {
     const page = req.query.page;
@@ -16,7 +17,24 @@ router.get("/", auth, async (req, res) => {
     res.status(500).json(err);
   }
 });
-const PAGE_SIZE = 10;
+router.get("/getAll", auth, async (req, res) => {
+  try {
+    const notifications = await Notification.find().sort({ createdAt: -1 });
+    const page = req.query.page;
+    if (page) {
+      const skip_item = (page - 1) * PAGE_SIZE;
+      const end_item = page * PAGE_SIZE;
+      const result = notifications.slice(skip_item, end_item);
+      return res
+        .status(200)
+        .json({ result: result, len: notifications.length });
+    }
+    res.status(200).json(notifications);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 router.get("/cate/:slug", auth, async (req, res) => {
   try {
     const cate = await Category.findOne({ slug: req.params.slug });
