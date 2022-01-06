@@ -27,7 +27,9 @@ mongoose.connect(
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
-
+app.get("/", (req, res) => {
+  res.send("server is up and running");
+});
 app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/posts", post);
@@ -35,7 +37,6 @@ app.use("/api/falcuty", falcutyRoute);
 app.use("/api/admin", adminRoute);
 app.use("/api/comments", commentRoute);
 app.use("/api/notifications", notificationRoute);
-
 
 const server = app.listen(PORT, () => {
   console.log("server is running 5000");
@@ -56,7 +57,7 @@ io.use(async (socket, next) => {
 });
 
 io.on("connection", (socket) => {
-  console.log(`${socket.userId} connected`)
+  console.log(`${socket.userId} connected`);
   socket.on("postNoification", ({ message }) => {
     io.emit("newNotification", message);
   });
