@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const Notification = require("../models/falcutyNotification");
+const Notification = require("../models/FalcutyNotification");
 const auth = require("../middlewares/checkLogin");
 const Category = require("../models/Category");
 const PAGE_SIZE = 10;
