@@ -13,7 +13,7 @@ const notificationRoute = require("./routes/notification");
 const post = require("./routes/post");
 const socketio = require("socket.io");
 const jwt = require("jsonwebtoken");
-const PORT = process.env.PORT || 5000;
+
 dotenv.config();
 mongoose.connect(
   process.env.MONGO_URL,
@@ -37,7 +37,7 @@ app.use("/api/falcuty", falcutyRoute);
 app.use("/api/admin", adminRoute);
 app.use("/api/comments", commentRoute);
 app.use("/api/notifications", notificationRoute);
-
+const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
   console.log("server is running 5000");
 });
