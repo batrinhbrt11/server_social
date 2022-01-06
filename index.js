@@ -48,8 +48,9 @@ app.use("/api/comments", commentRoute);
 app.use("/api/notifications", notificationRoute);
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
-  console.log("server is running 5000");
+  console.log("server is running ");
 });
+console.log(PORT);
 
 // Setup socket.io
 const io = socketio(server);
@@ -66,7 +67,6 @@ io.use(async (socket, next) => {
 });
 
 io.on("connection", (socket) => {
-  console.log(`${socket.userId} connected`);
   socket.on("postNoification", ({ message }) => {
     io.emit("newNotification", message);
   });
