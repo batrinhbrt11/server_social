@@ -4,6 +4,7 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "helmet": "^4.6.0",
+    "http-proxy-middleware": "^2.0.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.12",
     "mongoose-referrence-validator": "^1.0.0",
@@ -20,7 +21,7 @@
   },
   "engines": {
     "node": "16.x",
-    "npm":"7.21.1"
+    "npm": "7.21.1"
   },
   "author": "",
   "license": "ISC",
