@@ -50,7 +50,7 @@ const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
   console.log("server is running ");
 });
-console.log(PORT);
+console.log("dfdsfsdf", PORT);
 
 // Setup socket.io
 const io = socketio(server);
