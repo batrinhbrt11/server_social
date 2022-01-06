@@ -13,7 +13,7 @@ const notificationRoute = require("./routes/notification");
 const post = require("./routes/post");
 const socketio = require("socket.io");
 const jwt = require("jsonwebtoken");
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 dotenv.config();
 mongoose.connect(
   process.env.MONGO_URL,
