@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const User = require("../models/User");
-const Notification = require("../models/falcutyNotification");
+const Notification = require("../models/FalcutyNotification");
 const Category = require("../models/Category");
 const dotenv = require("dotenv");
 1;
