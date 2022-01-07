@@ -11,6 +11,12 @@ const falcutyRoute = require("./routes/falcuty");
 const commentRoute = require("./routes/comment");
 const notificationRoute = require("./routes/notification");
 const post = require("./routes/post");
+const cors = require("cors");
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 const socketio = require("socket.io");
 const jwt = require("jsonwebtoken");
 
@@ -29,14 +35,6 @@ app.use(helmet());
 app.use(morgan("common"));
 app.get("/", (req, res) => {
   res.send("server is up and running");
-});
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
 });
 
 app.use("/api/users", userRoute);
