@@ -32,7 +32,7 @@ router.get("/categories/:id", async (req, res) => {
 router.put("/categories/:id", checkLogin, checkAdmin, async (req, res) => {
   try {
     const cate = await Category.findById(req.params.id);
-    await cate.updateOne({ name: req.body.name.toUpperCase() });
+    await cate.updateOne({ name: req.body.name });
     res.status(200).json(cate);
   } catch (err) {
     res.status(500).json(err);
