@@ -70,12 +70,13 @@ router.get("/falcuty/:id", auth, async (req, res) => {
     res.status(500).json(err);
   }
 });
-router.get("/:id", auth, async (req, res) => {
+router.get("/:slug", auth, async (req, res) => {
   try {
-    const notifications = await Notification.findById(req.params.id);
+    const notifications = await Notification.findOne({ slug: req.params.slug });
     if (!notifications) {
       return res.status(404).json("Không tồn tại thông báo");
     }
+    console.log(notifications.categoryId);
     const cate = await Category.findById(notifications.categoryId);
 
     res.status(200).json({ cate: cate, notifications: notifications });
