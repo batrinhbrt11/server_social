@@ -93,7 +93,7 @@ router.post("/notifications", checkLogin, checkFalcuty, async (req, res) => {
     res.status(200).json({
       code: 1,
       message: {
-        url: `/notification/noti/${savedNotification._id}`,
+        url: `/notification/noti/${savedNotification.slug}`,
         name: cateName,
         title: savedNotification.title,
       },
